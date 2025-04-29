@@ -3,3 +3,4 @@ pollutants = ['Ozone', 'PM2.5', 'PM10', 'CO', 'NO2', 'SO2']
 df_cleaned[pollutants].hist(figsize=(10, 6), bins=20, layout=(2, 3))
 plt.suptitle("Distribution of Pollutants")
 plt.show()
+
