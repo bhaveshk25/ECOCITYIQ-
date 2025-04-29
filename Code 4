@@ -1,0 +1,7 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Heatmap to visualize missing data
+sns.heatmap(df_cleaned.isnull(), cbar=False, cmap='viridis')
+plt.title("Missing Values Heatmap")
+plt.show()
