@@ -1,0 +1,20 @@
+# Load the merged dataset
+df = pd.read_csv('data/merged_air_quality.csv')
+df['Date'] = pd.to_datetime(df['Date'])
+
+# Check for missing values
+missing_values = df.isnull().sum()
+print("Missing values:\n", missing_values)
+
+# Drop rows with missing pollutant values and create a copy to avoid the warning
+df_cleaned = df.dropna(subset=['Ozone', 'PM2.5', 'PM10', 'CO', 'NO2', 'SO2']).copy()
+
+# Add new time-related features
+df_cleaned['Month'] = df_cleaned['Date'].dt.month
+df_cleaned['Weekday'] = df_cleaned['Date'].dt.day_name()
+
+# Save cleaned data
+df_cleaned.to_csv('data/cleaned_air_quality.csv', index=False)
+
+# Preview cleaned dataset
+df_cleaned.head()
