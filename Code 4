@@ -5,3 +5,4 @@ import matplotlib.pyplot as plt
 sns.heatmap(df_cleaned.isnull(), cbar=False, cmap='viridis')
 plt.title("Missing Values Heatmap")
 plt.show()
+
