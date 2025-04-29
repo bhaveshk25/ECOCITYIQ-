@@ -1,0 +1,37 @@
+import pandas as pd
+from functools import reduce
+
+# Define pollutant files
+pollutants = {
+    'Ozone': 'daily_44201_2023.csv',
+    'PM2.5': 'daily_88101_2023.csv',
+    'PM10': 'daily_88502_2023.csv',
+    'CO': 'daily_42101_2023.csv',
+    'NO2': 'daily_42602_2023.csv',
+    'SO2': 'daily_42401_2023.csv'
+}
+
+dataframes = []
+
+for name, file in pollutants.items():
+    df = pd.read_csv(f'data/{file}', usecols=[
+        'State Name', 'County Name', 'Site Num', 'Date Local', 'Arithmetic Mean'
+    ])
+    df.rename(columns={
+        'Arithmetic Mean': name,
+        'Date Local': 'Date'
+    }, inplace=True)
+    dataframes.append(df)
+
+# Merge all dataframes on common keys
+merged_df = reduce(lambda left, right: pd.merge(left, right, on=['State Name', 'County Name', 'Site Num', 'Date'], how='outer'), dataframes)
+
+# Convert date column to datetime
+merged_df['Date'] = pd.to_datetime(merged_df['Date'])
+merged_df.sort_values(by='Date', inplace=True)
+
+# Save merged data
+merged_df.to_csv('data/merged_air_quality.csv', index=False)
+
+# Preview the result
+merged_df.head()
