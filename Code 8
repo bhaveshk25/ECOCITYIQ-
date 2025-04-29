@@ -1,0 +1,37 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.tsa.arima.model import ARIMA
+
+# Load cleaned dataset
+df_cleaned = pd.read_csv('data/cleaned_air_quality.csv')
+df_cleaned['Date'] = pd.to_datetime(df_cleaned['Date'])
+
+# Group by Date to ensure unique index (take mean if duplicate exists)
+df_cleaned = df_cleaned.groupby('Date').mean(numeric_only=True).sort_index()
+
+# Assign daily frequency (reindexing will work now)
+df_cleaned = df_cleaned.asfreq('D', method='pad')
+df_cleaned.index.freq = pd.infer_freq(df_cleaned.index) or 'D'
+
+# Iterate over all columns (except 'Date') to fit ARIMA model and forecast
+for column in df_cleaned.columns:
+    data = df_cleaned[column].dropna()
+    
+    # Fit ARIMA model if data has more than one point
+    if len(data) > 1:
+        model = ARIMA(data, order=(5, 1, 0))
+        model_fit = model.fit()
+
+        # Forecast next 12 days
+        forecast = model_fit.forecast(steps=12)
+
+        # Plot historical data and forecast
+        plt.figure(figsize=(10, 5))
+        data.plot(label=f'Historical {column}')
+        forecast.plot(label=f'Forecast {column}', color='red')
+        plt.title(f"{column} Forecast")
+        plt.xlabel("Date")
+        plt.ylabel(f"{column} Level")
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
