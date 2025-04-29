@@ -6,3 +6,4 @@ plt.figure(figsize=(8, 6))
 sns.heatmap(corr, annot=True, cmap='coolwarm', vmin=-1, vmax=1, linewidths=0.5)
 plt.title("Correlation between Pollutants")
 plt.show()
+ 
