@@ -1,0 +1,12 @@
+# Monthly average pollutant levels
+monthly_avg = df_cleaned.groupby('Month')[pollutants].mean()
+monthly_avg.plot(figsize=(10, 6), title="Average Pollutant Levels by Month")
+plt.ylabel('Average Concentration')
+plt.show()
+
+# Weekday average pollutant levels
+weekday_avg = df_cleaned.groupby('Weekday')[pollutants].mean()
+weekday_avg = weekday_avg.reindex(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+weekday_avg.plot(figsize=(10, 6), title="Average Pollutant Levels by Weekday")
+plt.ylabel('Average Concentration')
+plt.show()
