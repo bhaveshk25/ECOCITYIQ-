@@ -1,0 +1,2 @@
+# Summary statistics of the dataset
+df_cleaned.describe()
